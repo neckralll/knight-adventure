@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
-    public static GameInput Instance { get; private set; }
-
     private InputActions _actions;
+
+    public static GameInput Instance { get; private set; }
 
     private void Awake() 
     {
@@ -14,4 +15,5 @@ public class GameInput : MonoBehaviour
     }
 
     public Vector2 GetMovementVector() => _actions.Player.Move.ReadValue<Vector2>();
+    public Vector3 GetMousePosition() => Mouse.current.position.ReadValue();
 }
