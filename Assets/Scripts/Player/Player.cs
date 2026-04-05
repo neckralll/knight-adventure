@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
     private const float MIN_MOVE_SPEED = 0.1f;
 
     private Rigidbody2D _rb;
+    private Vector2 _inputVector;
 
     [SerializeField] private float moveSpeed;
 
@@ -18,6 +19,11 @@ public class Player : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Update() 
+    {
+        _inputVector = GameInput.Instance.GetMovementVector();
+    }
+
     private void FixedUpdate()
     {
         HandleMovement();
@@ -25,10 +31,8 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        var input = GameInput.Instance.GetMovementVector();
-        var delta = input * (moveSpeed * Time.fixedDeltaTime);
-
+        var delta = _inputVector * (moveSpeed * Time.fixedDeltaTime);
         _rb.MovePosition(_rb.position + delta);
-        IsRunning = input.sqrMagnitude > MIN_MOVE_SPEED * MIN_MOVE_SPEED;
+        IsRunning = _inputVector.sqrMagnitude > MIN_MOVE_SPEED * MIN_MOVE_SPEED;
     }
 }
