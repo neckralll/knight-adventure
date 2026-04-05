@@ -23,19 +23,11 @@ public class EnemyAI : MonoBehaviour
         _currentState = startingState;
     }
 
-    private void Start() 
-    {
-        _startingPosition = transform.position;
-    }
-
     private void Update() 
     {
         switch (_currentState) 
         {
             default:
-            case State.Idle:
-                break;
-
             case State.Roaming:
                 _currentRoamingTime -= Time.deltaTime;
 
@@ -50,15 +42,19 @@ public class EnemyAI : MonoBehaviour
 
     private void Roaming() 
     {
+        _startingPosition = transform.position;
         _roamPosition = GetRoamingPosition();
+        ChangeFacingDirection(_startingPosition, _roamPosition);
         _navMeshAgent.SetDestination(_roamPosition);
     }
 
     private Vector3 GetRoamingPosition() => _startingPosition + Utils.GetRandomDirection() * Random.Range(roamingDistanceMin, roamingDistanceMax);
 
+    private void ChangeFacingDirection(Vector3 sourcePosition, Vector3 targetPosition) 
+        => transform.rotation = sourcePosition.x > targetPosition.x ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
+
     private enum State 
     {
-        Idle,
         Roaming
     }
 }
