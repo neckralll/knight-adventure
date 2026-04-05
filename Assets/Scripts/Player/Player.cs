@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -17,6 +18,16 @@ public class Player : MonoBehaviour
     {
         Instance = this;
         _rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start() 
+    {
+        GameInput.Instance.OnPlayerAttack += GameInput_OnPlayerAttack;
+    }
+
+    private void GameInput_OnPlayerAttack(object sender, EventArgs e)
+    {
+        ActiveWeapon.Instance.GetActiveWeapon().Attack();
     }
 
     private void Update() 
